@@ -15,12 +15,12 @@ $stateProvider
   )
 .state('usuario',{
     templateUrl:"templateusuario.html",  
-    url:'/usuario',
-    controller:'controlUsuario' }
+    url:'/alta',
+    controller:'controlAlta' }
   )
 .state('modificar',{
     templateUrl:"templateusuario.html",  
-    url:'/modificar/:id',
+    url:'/modificar/{:id}?:nombre:apellido:dni:foto',
     controller:'controlModificar' }
   )
 $urlRouterProvider.otherwise('/menu');
@@ -32,11 +32,14 @@ app.controller('controlMenu', function($scope, $http) {
 
  app.controller('controlModificar', function($scope, $http,$stateParams) {
   $scope.DatoTest="**modificar**";
+   console.log($stateParams.persona);
+
     $scope.persona={};
-  $scope.persona.nombre= "nombre" ;
-  $scope.persona.dni=$stateParams.id ;
-  $scope.persona.apellido= "otra" ;
-  $scope.persona.foto="sinfoto";
+  $scope.persona.id=$stateParams.id;
+  $scope.persona.nombre= $stateParams.nombre ;
+  $scope.persona.dni=$stateParams.dni ;
+  $scope.persona.apellido= $stateParams.apellido ;
+  $scope.persona.foto=$stateParams.foto;
 
 });
 app.controller('controlAlta', function($scope, $http) {
@@ -55,7 +58,7 @@ app.controller('controlAlta', function($scope, $http) {
 
   	console.log("persona a guardar:");
     console.log($scope.persona);
-    $http.post('PHP/nexo.php', { datos: {accion :"insertar",persona:$scope.persona}})
+    $http.post('PHP/nexo.php', { datos: {accion :"modificar",persona:$scope.persona}})
  	  .then(function(respuesta) {     	
  		     //aca se ejetuca si retorno sin errores      	
       	 console.log(respuesta.data);

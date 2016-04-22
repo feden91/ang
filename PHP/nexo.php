@@ -66,6 +66,10 @@ else{
 			echo"Voy a borrar";
 			Persona::BorrarPersona($respuesta->datos->persona);
 			break;
+		case 'modificar':
+			echo"Voy a modificar";
+			Persona::ModificarPersona($respuesta->datos->persona);
+			break;
 		
 		case 'insertar':
 			echo"Voy a guardar";
