@@ -1,5 +1,5 @@
 
-var app = angular.module('ABMangularPHP', ['ui.router']);
+var app = angular.module('ABMangularPHP', ['ui.router','angularFileUpload']);
 
 app.config(function($stateProvider,$urlRouterProvider){
 $stateProvider
@@ -42,31 +42,66 @@ app.controller('controlMenu', function($scope, $http) {
   $scope.persona.foto=$stateParams.foto;
 
 });
-app.controller('controlAlta', function($scope, $http) {
+app.controller('controlAlta', function($scope, $http ,FileUploader) {
   $scope.DatoTest="**alta**";
 
+$scope.uploader = new FileUploader({url: 'PHP/nexo.php'});
+      $scope.uploader.queueLimit = 10; // indico cuantos archivos permito cargar
+            
 //inicio las variables
   $scope.persona={};
   $scope.persona.nombre= "natalia" ;
   $scope.persona.dni= "12312312" ;
   $scope.persona.apellido= "natalia" ;
-  $scope.persona.foto="sinfoto";
+  $scope.persona.foto="pordefecto.png";
+  $scope.cargarfoto= function(nombredefoto){
 
+      var direccion="fotos/"+nombredefoto;
+      $http.get(direccion,{responseType:"blob"})
+      .then(function (respuesta){
+          var mimetype = respuesta.data.type;
+          var archivo = new File([respuesta.data],direccion,{type:mimetype}); 
+        var fotoobtenida = new FileUploader.FileItem($scope.uploader,{});
+        fotoobtenida._file = archivo;
+        fotoobtenida.file = {};
+        fotoobtenida.file= new File([respuesta.data],nombredefoto,{type:mimetype});
+
+        $scope.uploader.queue.push(fotoobtenida);
+
+
+      }
+        );
+  }
+  
+$scope.cargarfoto($scope.persona.foto);
+
+$scope.uploader.onSuccessItem= function(item,response,status,headers){
+
+   console.info("Voy a guardar", item, response,status, headers);
+    console.log($scope.persona);
+    $http.post('PHP/nexo.php', { datos: {accion :"insertar",persona:$scope.persona}})
+    .then(function(respuesta) {       
+         //aca se ejetuca si retorno sin errores        
+         console.log(respuesta.data);
+
+    },function errorCallback(response) {        
+        //aca se ejecuta cuando hay errores
+        console.log( response);  
+});
+  }
 
   $scope.Guardar=function(){
 
+if ($scope.uploader.queue[0].file.name != 'pordefecto.png')
+{
+        var nombrefoto=$scope.uploader.queue[0].file.name;
+        $scope.persona.foto=nombrefoto; 
 
-  	console.log("persona a guardar:");
-    console.log($scope.persona);
-    $http.post('PHP/nexo.php', { datos: {accion :"modificar",persona:$scope.persona}})
- 	  .then(function(respuesta) {     	
- 		     //aca se ejetuca si retorno sin errores      	
-      	 console.log(respuesta.data);
 
-    },function errorCallback(response) {     		
-     		//aca se ejecuta cuando hay errores
-     		console.log( response);     			
- 	  });
+}
+$scope.uploader.uploadAll()
+  			
+ 	  
 
   
 

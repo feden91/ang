@@ -13,12 +13,16 @@
 	<link rel="stylesheet" type="text/css" href="css/estilo.css">
 	<link rel="stylesheet" type="text/css" href="css/animacion.css">
 	<!--final de Estilos-->    
+<!--https://github.com/MarioAr/ArchivosAngular-->
 
 
+ 	
  	<script SRC="bower_components/angular/angular.min.js" TYPE="text/javascript"></script>
+ 	<script SRC="bower_components\angular-ui-router\release\angular-ui-router.min.js" TYPE="text/javascript"></script>	
+ <script type="text/javascript" src="bower_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
 
  	<script SRC="js/app.js" TYPE="text/javascript"></script>
-<script SRC="bower_components\angular-ui-router\release\angular-ui-router.min.js" TYPE="text/javascript"></script>	
+ <script type="text/javascript" src="js/directivas/ngThumb.js"></script>
 </head>
 <body ng-app="ABMangularPHP" ng-controller="controlMenu">
 	<!--?php		
@@ -34,7 +38,7 @@
 		         	</a>
 		         </li>
 		         <li class="btn btn-info animated bounceInLeft" >
-		         	<a ui-sref="Alta">
+		         	<a ui-sref="usuario">
 		         		<span class="glyphicon glyphicon-plus-sign">&nbsp;</span>
 		         		Alta
 		         	</a>
@@ -57,7 +61,6 @@
 
 	  </div>
 							
-						</div>
-		</div>
+					
 </body>
 </html>
